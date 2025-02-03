@@ -1,0 +1,77 @@
+find_target(<prefix>
+	QUIET
+	REQUIRED
+	CONFIG_ONLY
+	--
+	<
+		<mode>
+		<mode_options>
+		--
+	>...
+)
+
+<prefix> is use to set some output variable which have <prefix> as its prefix
+<mode> is one of the following modes:
+- USE_FIND_PACKAGE
+- USE_PKGCONFIG
+- USE_SUBDIRECTORY
+- CONFIGURE_GIT
+- CONFIGURE_ARCHIVE
+
+USE_FIND_PACKAGE options:
+- PACKAGE <package>: the name of package will be used to find using find_package()
+- CONFIG_ONLY: stop find target if <package> found, 
+- TARGETS <target>...: required targets to be found
+* Note: TARGETS will be moved to OPTIONAL_TARGETS
+- OPTIONAL_TARGETS <target>...: optional targets to be found
+- COMPONENTS <component>...: optional components
+- ADDITIONAL_ARGUMENTS <argument>...: additional argument will be parse to find_package()
+
+USE_PKGCONFIG options:
+- MODULE_SPEC <moduleSpec>...:
+	the name of module with spec will be parsed to pkg_check_modules()
+- ADDITIONAL_ARGUMENTS <argument>...: additional argument will be parse to pkg_check_modules()
+
+USE_SUBDIRECTORY options:
+- PATH <path>: parse <path> to add_subdirectory()
+- USE_VARIABLE: use string(CONFIGURE <path>) argument before add_subdirectory()
+- TARGETS <target>...: required targets to be found
+- OPTIONAL_TARGETS <target>...: optional targets to be found
+- EXCLUDE_FROM_ALL: parse EXCLUDE_FROM_ALL argument to add_subdirectory()
+- SYSTEM: parse SYSTEM argument to add_subdirectory()
+
+CONFIGURE_GIT options:
+- REPOSITORY <url>...:
+	<url> to the git repository
+- TAG <tag>...:
+	cloned repository will be checked out to <tag>
+	<tag> maybe tag, branch or commit hash
+* Note:
+	+ A pair is retrieved in list order of REPOSITORY and TAG will be cloned
+- GIT_EXECUTABLE <path>:
+	use git executable from <path>
+- CLONED_DIR_VAR <variable>: a variable that can be use with USE_* if supported
+
+CONFIGURE_ARCHIVE options:
+- EXTRACTED_DIR_VAR <variable>: a variable that can be use with USE_* if supported
+- <<url> [options]...>...: <url> to the archive.
+* option: 
+- HASH <algorithm> <hash> : <hash> with <algorithm> of the archive
+- INACTIVITY_TIMEOUT <seconds>: Stop download a url after a period of inactivity.
+- TIMEOUT <seconds>: Stop download a url after a given total time has elapsed.
+- EXPIRED_TIMEOUT <seconds>: if no hash provide, file will be re-download if expired.
+* Note:
+	+ EXPIRED_TIMEOUT can be math expr
+	example:
+	find_target(
+		--
+		CONFIGURE_ARCHIVE
+			# re-download if downloaded file hash not match
+			URL https://example.com/url
+			HASH "abcdefgh"
+			# re-download if file was downloaded more than 1 day ago
+			URL https://example2.com/url/without/checking/hash
+			EXPIRED_TIMEOUT "60 * 60 * 24"
+		--
+	)
+- ADDITIONAL_ARGUMENTS <argument>...: additional argument will be parse to find_package()
