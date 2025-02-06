@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.30)
 project(test LANGUAGES CXX)
 add_executable(test main.cpp)
 
-include(FindTarget.cmake)
+include(../FindTarget.cmake)
 macro(ftfunc)
 	find_target(ftFMT
 		REQUIRED

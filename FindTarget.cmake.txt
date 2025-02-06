@@ -10,7 +10,12 @@ find_target(<prefix>
 	>...
 )
 
-<prefix> is use to set some output variable which have <prefix> as its prefix
+<prefix> is use to set some output variable such as:
+<prefix>_FOUND
+<prefix>_TARGETS
+<prefix>_OPTIONAL_TARGETS
+including addition variables set by find_package(), add_subdirectory() (if used)
+
 <mode> is one of the following modes:
 - USE_FIND_PACKAGE
 - USE_PKGCONFIG
@@ -19,26 +24,24 @@ find_target(<prefix>
 - CONFIGURE_ARCHIVE
 
 USE_FIND_PACKAGE options:
-- PACKAGE <package>: the name of package will be used to find using find_package()
-- CONFIG_ONLY: stop find target if <package> found, 
+- PACKAGE <package>: pass <package> as the name of package to find_package()
+- CONFIG_ONLY: stop find target if <package> found, TARGETS will be treated as OPTIONAL_TARGETS
 - TARGETS <target>...: required targets to be found
-* Note: TARGETS will be moved to OPTIONAL_TARGETS
 - OPTIONAL_TARGETS <target>...: optional targets to be found
 - COMPONENTS <component>...: optional components
-- ADDITIONAL_ARGUMENTS <argument>...: additional argument will be parse to find_package()
+- ADDITIONAL_ARGUMENTS <argument>...: pass additional argument to find_package()
 
 USE_PKGCONFIG options:
 - MODULE_SPEC <moduleSpec>...:
-	the name of module with spec will be parsed to pkg_check_modules()
-- ADDITIONAL_ARGUMENTS <argument>...: additional argument will be parse to pkg_check_modules()
+	pass <moduleSpec> to pkg_check_modules()
 
 USE_SUBDIRECTORY options:
-- PATH <path>: parse <path> to add_subdirectory()
+- PATH <path>: pass <path> to add_subdirectory()
 - USE_VARIABLE: use string(CONFIGURE <path>) argument before add_subdirectory()
 - TARGETS <target>...: required targets to be found
 - OPTIONAL_TARGETS <target>...: optional targets to be found
-- EXCLUDE_FROM_ALL: parse EXCLUDE_FROM_ALL argument to add_subdirectory()
-- SYSTEM: parse SYSTEM argument to add_subdirectory()
+- EXCLUDE_FROM_ALL: pass EXCLUDE_FROM_ALL argument to add_subdirectory()
+- SYSTEM: pass SYSTEM argument to add_subdirectory()
 
 CONFIGURE_GIT options:
 - REPOSITORY <url>...:
@@ -67,11 +70,10 @@ CONFIGURE_ARCHIVE options:
 		--
 		CONFIGURE_ARCHIVE
 			# re-download if downloaded file hash not match
-			URL https://example.com/url
+			URL https://example.com/archive/url
 			HASH "abcdefgh"
 			# re-download if file was downloaded more than 1 day ago
-			URL https://example2.com/url/without/checking/hash
+			URL https://example2.com/archive/url/without/checking/hash
 			EXPIRED_TIMEOUT "60 * 60 * 24"
 		--
 	)
-- ADDITIONAL_ARGUMENTS <argument>...: additional argument will be parse to find_package()

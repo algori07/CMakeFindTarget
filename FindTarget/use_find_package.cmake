@@ -142,5 +142,6 @@ macro(_find_target_use_find_package PREFIX)
 	unset(__ARG_PACKAGE_NAME)
 	unset(__ARG_TARGETS)
 	unset(__ARG_OPTIONAL_TARGETS)
+	unset(__ARG_ADDITIONAL_ARGUMENTS)
 	
 endmacro() # end use_find_package
